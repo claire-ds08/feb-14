@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Be My Valentine 😈</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle, #ff4d6d, #ff758c);
+    font-family: Arial, sans-serif;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .container {
+    background: white;
+    padding: 45px;
+    border-radius: 30px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    z-index: 10;
+  }
+
+  h1 {
+    color: #ff1744;
+    margin-bottom: 25px;
+    font-size: 34px;
+  }
+
+  #message {
+    color: #555;
+    font-size: 16px;
+    margin-bottom: 20px;
+    min-height: 22px;
+  }
+
+  button {
+    padding: 15px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 10px;
+    transition: all 0.2s ease;
+  }
+
+  #yesBtn {
+    background: #ff1744;
+    color: white;
+  }
+
+  #noBtn {
+    background: #ccc;
+    position: absolute;
+  }
+
+  .heart {
+    position: absolute;
+    font-size: 20px;
+    animation: float 3s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(100vh); opacity: 1; }
+    100% { transform: translateY(-10vh); opacity: 0; }
+  }
+
+  .shake {
+    animation: shake 0.4s;
+  }
+
+  @keyframes shake {
+    0% { transform: translate(0); }
+    25% { transform: translate(-10px, 5px); }
+    50% { transform: translate(10px, -5px); }
+    75% { transform: translate(-10px, 5px); }
+    100% { transform: translate(0); }
+  }
+</style>
+</head>
+
+<body>
+
+<audio id="bgMusic" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5c38f2c92f.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+  <h1 id="question">Will you be my Valentine? 💘</h1>
+  <div id="message"></div>
+  <button id="yesBtn">Yes 💖</button>
+  <button id="noBtn">No 💔</button>
+</div>
+
+<script>
+  // 💌 NAME FROM LINK
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get("name");
+  if (name) {
+    document.getElementById("question").innerText =
+      `Will you be my Valentine, ${name}? 😏💘`;
+  }
+
+  // 🎶 MUSIC
+  document.body.addEventListener("click", () => {
+    document.getElementById("bgMusic").play();
+  }, { once: true });
+
+  const noBtn = document.getElementById("noBtn");
+  const yesBtn = document.getElementById("yesBtn");
+  const msg = document.getElementById("message");
+
+  const guiltMessages = [
+    "Are you sure? 😢",
+    "That’s kinda rude...",
+    "My mom will ask about you 🥲",
+    "I already told my friends...",
+    "Please??? 🥺👉👈",
+    "This is emotional damage 😭"
+  ];
+
+  let chaosLevel = 0;
+
+  // 😈 NO BUTTON = LIES + CHAOS
+  noBtn.addEventListener("mouseover", () => {
+    chaosLevel++;
+
+    // teleport
+    noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
+    noBtn.style.top = Math.random() * (window.innerHeight - 50) + "px";
+
+    // gaslight
+    msg.innerText = guiltMessages[Math.floor(Math.random() * guiltMessages.length)];
+
+    // YES grows uncontrollably
+    yesBtn.style.fontSize = 18 + chaosLevel * 4 + "px";
+    yesBtn.style.padding = 15 + chaosLevel * 3 + "px";
+
+    // screen shake
+    document.body.classList.add("shake");
+    setTimeout(() => document.body.classList.remove("shake"), 300);
+
+    // duplicate NO buttons 😵‍💫
+    if (chaosLevel > 3 && chaosLevel < 8) {
+      const clone = noBtn.cloneNode(true);
+      clone.style.left = Math.random() * window.innerWidth + "px";
+      clone.style.top = Math.random() * window.innerHeight + "px";
+      document.body.appendChild(clone);
+    }
+
+    // eventually lie
+    if (chaosLevel > 8) {
+      noBtn.innerText = "Yes 💖";
+      noBtn.style.background = "#ff1744";
+      noBtn.style.color = "white";
+    }
+  });
+
+  // 💖 YES CLICK = TOTAL TAKEOVER
+  yesBtn.addEventListener("click", () => {
+    document.body.innerHTML = `
+      <div style="
+        height:100vh;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        background: radial-gradient(circle, #ff1744, #ff758c);
+        font-family: Arial;
+        text-align:center;
+        color:white;">
+        <h1 style="font-size:48px;">
+          CONGRATS 😈💘<br>
+          You’re officially my Valentine.
+        </h1>
+      </div>
+    `;
+  });
+
+  // 💕 HEART STORM
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerText = ["💖","💘","💞","💗"][Math.floor(Math.random()*4)];
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = Math.random() * 25 + 15 + "px";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 3000);
+  }, 200);
+</script>
+
+</body>
+</html>
